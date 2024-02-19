@@ -1,0 +1,207 @@
+﻿@model IEnumerable<AlMorugWeb.Models.ViewModels.ProductModel>
+@using System.Globalization
+@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer localizer
+
+@{
+    var isRTL = CultureInfo.CurrentCulture.Name.StartsWith("ar");
+}
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+
+<link rel="stylesheet" href="~/css/StyleSheet2.css" />
+
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
+<link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
+
+<!--  search bar  -->
+<div class="search-container">
+    <form asp-controller="Home" asp-action="Projects" method="get">
+        <input type="text" name="SearchString" value="@ViewBag.SearchString" placeholder="Search...">
+        <button type="submit" value="Filter"><i class="fa fa-search"></i></button>
+    </form>
+</div>
+
+<div class="glass" id="galssSlider">
+    <button class="close-btn" id="colse">&times;</button>
+
+    <div class="swiper">
+        <!-- Additional required wrapper -->
+        <div class="swiper-wrapper" id="imgescontainer">
+            <!-- Slides -->
+            <div class="swiper-slide"><img src="~/Images/pic1.jpg" alt="" /></div>
+            <div class="swiper-slide">
+                <img src="~/Images/FpFbmaHXsAA044e.jpg" alt="" />
+            </div>
+            <div class="swiper-slide">
+                <img src="~/Images/mh-mabany-slide02.jpg" alt="" />
+            </div>
+
+        </div>
+        <!-- If we need pagination -->
+        <div class="swiper-pagination"></div>
+
+        <!-- If we need navigation buttons -->
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
+        <div class="discription-contaner">
+            <p id="discription" class="discription">
+            </p>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="product-row">
+    @foreach (var item in Model)
+    {
+        <div class="product">
+            <div class="product-image">
+                <div class="swiper">
+                    <!-- Additional required wrapper -->
+                    <div class="swiper-wrapper">
+                        <!-- Slides -->
+                        @if (@item.Gallery.Count() > 0)
+                        {
+                            @for (int i = 0; i < @item.Gallery.Count(); i++)
+                            {
+                                <div class="swiper-slide"><img src="@item.Gallery[i].URL" alt="" /></div>
+                            }
+
+                        }
+                        else
+                        {
+                            <div class="swiper-slide"><img src="~/Images/FpFbmaHXsAA044e.jpg" alt="" /></div>
+
+                        }
+                    </div>
+                    <!-- If we need pagination -->
+                    <div class="swiper-pagination"></div>
+
+                    <!-- If we need navigation buttons -->
+                    <div class="swiper-button-prev"></div>
+                    <div class="swiper-button-next"></div>
+                </div>
+            </div>
+            <div class="product-info">
+                <h2 class="product-name">
+                    @if (isRTL)
+                    {
+                        @item.ProductNameAr
+
+                    }
+                    else
+                    {
+                        @item.ProductName
+
+                    }
+
+                </h2>
+                <p class="product-phone">Phone: @item.PhoneNumber</p>
+                <p class="product-description">
+                    @if (isRTL)
+                    {
+                        @if (item.DescriptionAr.Length >= 170)
+                        {
+                            @item.DescriptionAr.ToString().Substring(0, 170)
+
+                        }
+                        else
+                        {
+                            @item.DescriptionAr
+
+                        }
+                    }
+                    else
+                    {
+                        @if (item.Description.Length >= 170)
+                        {
+                            @item.Description.ToString().Substring(0, 170)
+
+                        }
+                        else
+                        {
+                            @item.Description
+
+                        }
+                    }
+
+                </p>
+
+                <p>
+                    @if (isRTL)
+                    {
+                        @item.ProductNameAr
+
+                    }
+                    else
+                    {
+                        @item.ProductName
+
+                    }
+                </p>
+                <p class="product-price">
+                    $
+                    @item.Price
+
+                </p>
+                <div class="product-buttons">
+                    <a href="
+                @item.Location"><button class="product-button-location">@localizer["Go to Location"]</button></a>
+                    <button id="showptn" class="product-button-show">@localizer["Show"]</button>
+                </div>
+                <span id="allDescription" style="display:none;">
+                    @if (isRTL)
+                    {
+                        @item.DescriptionAr
+
+                    }
+                    else
+                    {
+                        @item.Description
+
+                    }
+                </span>
+            </div>
+
+        </div>
+
+
+    }
+
+
+
+
+</div>
+
+<script src="~/js/JavaScript1.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+<script>
+    const swiper = new Swiper(".swiper", {
+        // Optional parameters
+        autoplay: {
+            delay: 2000,
+            disableOnInteraction: false,
+        },
+        loop: true,
+
+        // If we need pagination
+        pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+        },
+
+        // Navigation arrows
+        navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+        },
+    });
+</script>

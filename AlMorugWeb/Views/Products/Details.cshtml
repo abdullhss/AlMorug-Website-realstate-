@@ -1,0 +1,114 @@
+﻿@model AlMorugWeb.Models.ViewModels.ProductModel
+@using System.Globalization
+@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer localizer
+
+@{
+    var isRTL = CultureInfo.CurrentCulture.Name.StartsWith("ar");
+}
+@{
+    ViewData["Title"] = "Details";
+}
+
+
+<link rel="stylesheet" href="~/css/detail.css">
+<link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
+
+<section class="product-details">
+    @if (isRTL)
+    {
+        <h1>@Model.ProductNameAr</h1>
+
+    }
+    else
+    {
+        <h1>@Model.ProductName</h1>
+
+    }
+
+
+
+    <!-- slider -->
+
+
+    <div class="slider">
+
+        <div class="swiper">
+            <!-- Additional required wrapper -->
+            <div class="swiper-wrapper" id="imgescontainer">
+                <!-- Slides -->
+                @for (int i = 0; i < Model.Gallery.Count(); i++)
+                {
+                    <div class="swiper-slide">
+                        <img src="@Model.Gallery[i].URL" alt="" />
+                    </div>
+                }
+
+            </div>
+            <!-- If we need pagination -->
+            <div class="swiper-pagination"></div>
+
+            <!-- If we need navigation buttons -->
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
+        </div>
+    </div>
+
+    </div>
+
+    <div class="product-description">
+
+        <p class="Description">
+            @localizer["Description"]:
+            @if (isRTL)
+            {
+                @Html.DisplayFor(model => model.DescriptionAr)
+
+            }
+            else
+            {
+                @Html.DisplayFor(model => model.Description)
+
+            }
+        </p>
+        <hr>
+        <p class="price">
+            @localizer["Price"]: $
+            @Html.DisplayFor(model => model.Price)
+
+        </p>
+        <hr>
+        <p class="number">
+            @localizer["Phone Number"]:
+            @Html.DisplayFor(model => model.PhoneNumber)
+        </p>
+    </div>
+</section>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+<script>
+    const swiper = new Swiper(".swiper", {
+        // Optional parameters
+        autoplay: {
+            delay: 2000,
+            disableOnInteraction: false,
+        },
+        loop: true,
+
+        // If we need pagination
+        pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+        },
+
+        // Navigation arrows
+        navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+        },
+    });
+</script>
